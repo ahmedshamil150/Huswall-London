@@ -241,9 +241,11 @@ generic status change.
 - Adds delivery as a separate line when shipping is non-zero, so the session
   total matches the order total.
 - Expires the session after one hour.
-- `/api/payments/webhook` verifies `Stripe-Signature` HMAC-SHA256 over
-  `${timestamp}.${rawBody}` with a 300-second tolerance before parsing or
-  writing anything.
+- `/api/payments/webhook` uses Vercel's web-standard `POST(request)` handler so
+  `request.text()` preserves the exact bytes. It verifies `Stripe-Signature`
+  HMAC-SHA256 over `${timestamp}.${rawBody}` with a 300-second tolerance before
+  parsing or writing anything. A Node `(req, res)` handler would receive an
+  already-parsed body and break the signature.
 - Only `checkout.session.completed` with `payment_status = paid`, or
   `checkout.session.async_payment_succeeded`, can mark an order paid.
 - Returning non-2xx on a processing failure lets Stripe retry safely.

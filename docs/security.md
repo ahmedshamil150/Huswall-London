@@ -171,8 +171,9 @@ Limitations:
 - No frontend action marks an order paid.
 - Stripe webhooks are verified with HMAC-SHA256 over
   `${timestamp}.${rawBody}` and a 300-second tolerance.
-- The raw body is read as bytes; a parsed object is not accepted for signature
-  verification.
+- The webhook uses Vercel's web-standard handler and reads the unparsed body with
+  `request.text()`. Vercel's Node helper would parse JSON and invalidate the
+  signature, so it is deliberately not used for this endpoint.
 - Multiple `v1` signatures are supported for secret rotation.
 - Only completed sessions with captured payment, or asynchronous payment
   success, can mark an order paid.

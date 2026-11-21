@@ -73,24 +73,6 @@ export async function readJson(req, { maxBytes = 64 * 1024 } = {}) {
   }
 }
 
-export async function readRawBody(req, { maxBytes = 1024 * 1024 } = {}) {
-  // Some runtimes provide a pre-read body. Only accept bytes/strings: a parsed
-  // object cannot be used for signature verification.
-  if (Buffer.isBuffer(req.body)) return req.body.toString('utf8');
-  if (typeof req.body === 'string') return req.body;
-
-  const chunks = [];
-  let size = 0;
-  for await (const chunk of req) {
-    size += chunk.length;
-    if (size > maxBytes) {
-      throw new AppError('PAYLOAD_TOO_LARGE', 'Request body is too large.', 413);
-    }
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf8');
-}
-
 export function getClientIp(req) {
   const forwarded = req.headers['x-forwarded-for'];
   if (typeof forwarded === 'string' && forwarded.length) return forwarded.split(',')[0].trim();
