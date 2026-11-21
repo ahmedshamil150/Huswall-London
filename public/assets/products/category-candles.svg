@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="candles">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE6D8"/><stop offset="1" stop-color="#E3D6C2"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#D8C9B2" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="760" rx="112" ry="14" fill="#6E4526" opacity=".12"/>
+      <rect x="292" y="520" width="216" height="240" rx="10" fill="#A9713B"/>
+      <rect x="292" y="520" width="216" height="240" rx="10" fill="url(#glow)" opacity=".25"/>
+      <ellipse cx="400" cy="520" rx="108" ry="20" fill="#C08A52"/>
+      <ellipse cx="400" cy="518" rx="96" ry="16" fill="#F2E8D5"/>
+      <path d="M400 512v-34" stroke="#6E4526" stroke-width="4"/>
+      <path d="M400 478c-14-18 2-34 0-46 18 14 22 32 0 46Z" fill="#E8B563"/>
+      <path d="M400 474c-7-10 1-19 0-26 9 8 11 18 0 26Z" fill="#F6D68F"/>
+      <rect x="318" y="588" width="164" height="1" fill="#6E4526" opacity=".18"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#6E4526" opacity=".65">CANDLES</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

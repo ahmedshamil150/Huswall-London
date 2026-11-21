@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact Us | Hasswell London</title>
+    <meta name="description" content="Contact Hasswell London about an order, a product or a return. We read every message." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <span><a href="/">Home</a></span>
+            <span aria-current="page">Contact</span>
+          </nav>
+          <span class="eyebrow" style="margin-top:1.5rem">Contact</span>
+          <h1 style="margin-top:1rem">Talk to a person.</h1>
+          <p class="lede" style="margin-top:1rem">
+            Questions about an order, a product or a return go to the same small team.
+            Include your order number if you have one.
+          </p>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="container">
+          <div class="contact-grid">
+            <div>
+              <div class="contact-detail">
+                <h3>Email</h3>
+                <p><a href="mailto:hello@hasswelllondon.co.uk" data-setting="store.email">hello@hasswelllondon.co.uk</a></p>
+              </div>
+              <div class="contact-detail">
+                <h3>Telephone</h3>
+                <p data-setting="store.phone">Not currently offered — please email us.</p>
+              </div>
+              <div class="contact-detail">
+                <h3>Post</h3>
+                <p data-setting="store.address">London, United Kingdom</p>
+              </div>
+              <div class="contact-detail">
+                <h3>Orders</h3>
+                <p class="muted" style="font-size:.9rem">
+                  You can view your order history and tracking in
+                  <a href="/account" style="text-decoration:underline">your account</a>.
+                </p>
+              </div>
+
+              <div class="notice" style="margin-top:2.5rem">
+                <p class="small">
+                  For returns, please read the
+                  <a href="/delivery-returns" style="text-decoration:underline">Delivery &amp; Returns</a>
+                  page first so we can resolve it quickly.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div id="contact-notice" class="notice" hidden role="status" style="margin-bottom:1.5rem"></div>
+
+              <form id="contact-form" novalidate>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="name">Your name *</label>
+                    <input class="input" id="name" name="name" autocomplete="name" required />
+                  </div>
+                  <div class="field">
+                    <label for="email">Email address *</label>
+                    <input class="input" id="email" name="email" type="email" autocomplete="email" required />
+                  </div>
+                  <div class="field field--full">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject">
+                      <option value="Order enquiry">Order enquiry</option>
+                      <option value="Product question">Product question</option>
+                      <option value="Return or refund">Return or refund</option>
+                      <option value="Wholesale or press">Wholesale or press</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="field field--full">
+                    <label for="order_number">Order number (optional)</label>
+                    <input class="input" id="order_number" name="order_number" placeholder="HL-26-00000" />
+                  </div>
+                  <div class="field field--full">
+                    <label for="message">Message *</label>
+                    <textarea class="textarea" id="message" name="message" rows="6" required></textarea>
+                  </div>
+                  <div class="field field--full" aria-hidden="true" style="position:absolute;left:-9999px">
+                    <label for="company_website">Leave this field empty</label>
+                    <input id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
+                  </div>
+                </div>
+
+                <button class="btn" type="submit" style="margin-top:1.5rem">Send message</button>
+                <p class="small muted" style="margin-top:1rem">
+                  We use your details only to answer your message. See our
+                  <a href="/privacy" style="text-decoration:underline">Privacy Policy</a>.
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

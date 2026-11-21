@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create an Account | Hasswell London</title>
+    <meta name="description" content="Create a Hasswell London account to keep track of your orders." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/register.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="auth-shell">
+        <div class="auth-aside">
+          <span class="wordmark" style="color:#f7f4ec"><span>Hasswell</span><span class="wordmark__sub" style="color:rgba(247,244,236,.6)">London</span></span>
+          <div>
+            <h2>A quieter way to shop.</h2>
+            <p>An account keeps your order history and delivery details together. No marketing unless you ask for it.</p>
+          </div>
+          <p class="small" style="color:rgba(247,244,236,.55)">Hasswell London · Est. London</p>
+        </div>
+
+        <div class="auth-form">
+          <div class="auth-form__inner">
+            <span class="eyebrow">Account</span>
+            <h1 style="margin-top:.9rem">Create an account.</h1>
+
+            <div class="notice notice--error" id="auth-error" hidden style="margin-top:1.5rem"></div>
+            <div class="notice notice--success" id="auth-notice" hidden style="margin-top:1.5rem"></div>
+
+            <form id="register-form" novalidate style="margin-top:2rem">
+              <div class="stack">
+                <div class="field">
+                  <label for="full_name">Full name</label>
+                  <input class="input" id="full_name" name="full_name" autocomplete="name" required />
+                </div>
+                <div class="field">
+                  <label for="email">Email address</label>
+                  <input class="input" id="email" name="email" type="email" autocomplete="email" required />
+                </div>
+                <div class="field">
+                  <label for="password">Password</label>
+                  <input class="input" id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+                  <span class="hint">At least 8 characters. Use a passphrase you do not use elsewhere.</span>
+                </div>
+                <div class="field">
+                  <label for="password_confirm">Confirm password</label>
+                  <input class="input" id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required />
+                </div>
+              </div>
+
+              <label class="checkbox" style="margin-top:1.25rem">
+                <input type="checkbox" id="terms" required />
+                <span>I agree to the <a href="/terms" style="text-decoration:underline">Terms &amp; Conditions</a> and <a href="/privacy" style="text-decoration:underline">Privacy Policy</a>.</span>
+              </label>
+
+              <button class="btn btn--block" type="submit" style="margin-top:1.75rem">Create account</button>
+            </form>
+
+            <p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

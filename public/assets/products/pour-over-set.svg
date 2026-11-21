@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="stoneware pour over set">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE9E0"/><stop offset="1" stop-color="#E3D9CC"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#D8CBB9" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="766" rx="140" ry="15" fill="#6F6558" opacity=".12"/>
+      <path d="M322 700c-6-66 6-120 18-144h120c12 24 24 78 18 144 0 14-30 24-78 24s-78-10-78-24Z" fill="#B9B0A0"/>
+      <path d="M340 556c0-8 12-14 28-14h64c16 0 28 6 28 14v18H340v-18Z" fill="#D2CABB"/>
+      <path d="M352 500h96l28 44H324l28-44Z" fill="#D2CABB"/>
+      <path d="M368 520h64" stroke="#6F6558" stroke-width="2" opacity=".25"/>
+      <path d="M548 600c30 0 30 54 0 54" fill="none" stroke="#B9B0A0" stroke-width="14"/>
+      <rect x="360" y="620" width="80" height="1" fill="#6F6558" opacity=".16"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#6F6558" opacity=".65">STONEWARE POUR OVER SET</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

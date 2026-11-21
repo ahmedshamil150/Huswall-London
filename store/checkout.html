@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checkout | Hasswell London</title>
+    <meta name="description" content="Complete your Hasswell London order." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/checkout.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <span><a href="/">Home</a></span>
+            <span><a href="/cart">Bag</a></span>
+            <span aria-current="page">Checkout</span>
+          </nav>
+          <div class="between" style="margin-top:1rem;flex-wrap:wrap">
+            <h1>Checkout</h1>
+            <div class="cluster small muted" aria-label="Checkout progress">
+              <span id="step-indicator">Step 1 of 2 — Delivery details</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container checkout-layout">
+        <div>
+          <div id="checkout-error" class="notice notice--error" hidden style="margin-bottom:1.5rem"></div>
+
+          <!-- Step 1 -->
+          <form id="details-form" novalidate>
+            <section class="form-section">
+              <div class="form-section__head">
+                <h2>Contact</h2>
+                <p>Your order confirmation and tracking updates are sent here.</p>
+              </div>
+              <div class="form-grid">
+                <div class="field field--full">
+                  <label for="email">Email address *</label>
+                  <input class="input" id="email" name="email" type="email" autocomplete="email" required />
+                  <span class="error" id="email-error" role="alert"></span>
+                </div>
+                <div class="field field--full">
+                  <label for="phone">Phone number *</label>
+                  <input class="input" id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="For delivery updates only" />
+                  <span class="error" id="phone-error" role="alert"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="form-section__head">
+                <h2>Delivery address</h2>
+                <p id="delivery-region-note">We currently deliver within the United Kingdom.</p>
+              </div>
+              <div class="form-grid">
+                <div class="field field--full">
+                  <label for="shipping_name">Full name *</label>
+                  <input class="input" id="shipping_name" name="shipping_name" autocomplete="name" required />
+                  <span class="error" id="shipping_name-error" role="alert"></span>
+                </div>
+                <div class="field field--full">
+                  <label for="shipping_line1">Address line 1 *</label>
+                  <input class="input" id="shipping_line1" name="shipping_line1" autocomplete="address-line1" required />
+                  <span class="error" id="shipping_line1-error" role="alert"></span>
+                </div>
+                <div class="field field--full">
+                  <label for="shipping_line2">Address line 2</label>
+                  <input class="input" id="shipping_line2" name="shipping_line2" autocomplete="address-line2" />
+                </div>
+                <div class="field">
+                  <label for="shipping_city">Town or city *</label>
+                  <input class="input" id="shipping_city" name="shipping_city" autocomplete="address-level2" required />
+                  <span class="error" id="shipping_city-error" role="alert"></span>
+                </div>
+                <div class="field">
+                  <label for="shipping_region">County</label>
+                  <input class="input" id="shipping_region" name="shipping_region" autocomplete="address-level1" />
+                </div>
+                <div class="field">
+                  <label for="shipping_postcode">Postcode *</label>
+                  <input class="input" id="shipping_postcode" name="shipping_postcode" autocomplete="postal-code" required />
+                  <span class="error" id="shipping_postcode-error" role="alert"></span>
+                </div>
+                <div class="field">
+                  <label for="shipping_country">Country *</label>
+                  <select id="shipping_country" name="shipping_country" autocomplete="country" required></select>
+                </div>
+                <div class="field field--full">
+                  <label for="delivery_notes">Delivery notes (optional)</label>
+                  <textarea class="textarea" id="delivery_notes" name="delivery_notes" rows="2" placeholder="Anything the courier should know"></textarea>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="form-section__head">
+                <h2>Delivery method</h2>
+              </div>
+              <div class="notice" id="delivery-method">
+                <p><strong id="delivery-method-name">Delivery</strong> — <span id="delivery-method-price">Calculated from your order</span></p>
+                <p class="small" id="delivery-method-note" style="margin-top:.35rem"></p>
+              </div>
+            </section>
+
+            <div class="cluster" style="margin-top:2rem">
+              <button class="btn" type="submit" id="continue-btn">Continue to review</button>
+              <a class="link-underline" href="/cart">Back to bag</a>
+            </div>
+          </form>
+
+          <!-- Step 2 -->
+          <section id="review-step" hidden>
+            <div class="form-section__head">
+              <h2>Review your order</h2>
+              <p>Check the delivery details and total before paying.</p>
+            </div>
+
+            <div class="summary" style="position:static;margin-bottom:1.5rem">
+              <div class="between">
+                <h3 style="font-family:var(--font-body);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600">Delivering to</h3>
+                <button class="link-underline" type="button" id="edit-details" style="font-size:.68rem">Edit</button>
+              </div>
+              <div id="review-address" class="small" style="margin-top:.85rem;line-height:1.8"></div>
+              <div id="review-contact" class="small muted" style="margin-top:.5rem"></div>
+            </div>
+
+            <div id="review-items" style="margin-bottom:1.5rem"></div>
+
+            <div class="notice" id="payment-note">
+              <p id="payment-note-text">You will be redirected to our secure payment provider to complete payment.</p>
+            </div>
+
+            <label class="checkbox" style="margin-top:1.5rem">
+              <input type="checkbox" id="terms" required />
+              <span>I agree to the <a href="/terms" style="text-decoration:underline">Terms &amp; Conditions</a> and <a href="/privacy" style="text-decoration:underline">Privacy Policy</a>, and to the <a href="/delivery-returns" style="text-decoration:underline">Delivery &amp; Returns</a> policy. *</span>
+            </label>
+            <span class="error" id="terms-error" role="alert" style="display:block;font-size:.74rem;color:var(--danger)"></span>
+
+            <div class="cluster" style="margin-top:2rem">
+              <button class="btn" type="button" id="place-order">Pay now</button>
+              <button class="link-underline" type="button" id="back-to-details" style="border:0;background:none">Back to details</button>
+            </div>
+            <p class="small muted" style="margin-top:1.25rem">
+              Your order is only sent to our supplier once payment has been verified by our server.
+            </p>
+          </section>
+        </div>
+
+        <aside class="summary" aria-label="Order summary">
+          <h2>Your order</h2>
+          <div id="summary-items" style="margin-top:1.25rem"></div>
+          <div class="summary__rows" id="summary-rows"></div>
+          <div class="summary__total"><span>Total</span><span id="summary-total">—</span></div>
+          <p class="summary__note" id="summary-note"></p>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

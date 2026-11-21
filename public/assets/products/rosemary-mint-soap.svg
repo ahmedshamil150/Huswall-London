@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="rosemary mint soap">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E9EDE7"/><stop offset="1" stop-color="#DAE2D8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#CCD7C9" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="744" rx="160" ry="16" fill="#4D5C4A" opacity=".12"/>
+      <rect x="256" y="584" width="288" height="148" rx="30" fill="#9BAA93"/>
+      <rect x="264" y="592" width="272" height="132" rx="26" fill="#BAC7B2" opacity=".85"/>
+      <circle cx="400" cy="658" r="42" fill="none" stroke="#4D5C4A" stroke-width="1.5" opacity=".4"/>
+      <text x="400" y="654" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="2" fill="#4D5C4A" opacity=".8">HASSWELL</text>
+      <text x="400" y="672" text-anchor="middle" font-family="Georgia, serif" font-size="7" letter-spacing="2" fill="#4D5C4A" opacity=".6">LONDON</text>
+      <path d="M286 610c8-8 20-10 30-8" stroke="#ffffff" stroke-width="2" opacity=".35" fill="none"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#4D5C4A" opacity=".65">ROSEMARY MINT SOAP</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

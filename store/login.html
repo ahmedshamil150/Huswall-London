@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign In | Hasswell London</title>
+    <meta name="description" content="Sign in to your Hasswell London account to view orders and delivery details." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/login.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="auth-shell">
+        <div class="auth-aside">
+          <span class="wordmark" style="color:#f7f4ec"><span>Hasswell</span><span class="wordmark__sub" style="color:rgba(247,244,236,.6)">London</span></span>
+          <div>
+            <h2>Your orders, kept in one place.</h2>
+            <p>Sign in to follow an order, check delivery details or update your contact information.</p>
+          </div>
+          <p class="small" style="color:rgba(247,244,236,.55)">Hasswell London · Est. London</p>
+        </div>
+
+        <div class="auth-form">
+          <div class="auth-form__inner">
+            <span class="eyebrow">Account</span>
+            <h1 style="margin-top:.9rem">Welcome back.</h1>
+            <p class="muted" style="margin-top:.75rem">Sign in with the email address you used at checkout.</p>
+
+            <div class="notice notice--error" id="auth-error" hidden style="margin-top:1.5rem"></div>
+            <div class="notice notice--success" id="auth-notice" hidden style="margin-top:1.5rem"></div>
+
+            <form id="login-form" novalidate style="margin-top:2rem">
+              <div class="stack">
+                <div class="field">
+                  <label for="email">Email address</label>
+                  <input class="input" id="email" name="email" type="email" autocomplete="email" required />
+                </div>
+                <div class="field">
+                  <label for="password">Password</label>
+                  <input class="input" id="password" name="password" type="password" autocomplete="current-password" required />
+                </div>
+              </div>
+              <div class="between" style="margin-top:.75rem">
+                <button type="button" class="link-underline" id="forgot-toggle" style="border:0;background:none;padding:0">Forgot your password?</button>
+              </div>
+              <button class="btn btn--block" type="submit" style="margin-top:1.75rem">Sign in</button>
+            </form>
+
+            <form id="reset-form" hidden style="margin-top:1.5rem">
+              <p class="small muted">Enter your email and we will send a secure link to set a new password.</p>
+              <div class="field" style="margin-top:1rem">
+                <label for="reset-email">Email address</label>
+                <input class="input" id="reset-email" type="email" autocomplete="email" required />
+              </div>
+              <button class="btn btn--outline btn--block" type="submit" style="margin-top:1rem">Send reset link</button>
+            </form>
+
+            <p class="auth-switch">New to Hasswell? <a href="/register">Create an account</a></p>
+            <p class="auth-switch" style="margin-top:.5rem"><a href="/checkout">Continue as a guest</a> — you can still check out without an account.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

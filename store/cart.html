@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Bag | Hasswell London</title>
+    <meta name="description" content="Review the pieces in your Hasswell London bag before checkout." />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/cart-page.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <span><a href="/">Home</a></span>
+            <span aria-current="page">Bag</span>
+          </nav>
+          <h1>Your Bag</h1>
+        </div>
+      </div>
+
+      <div class="container" id="cart-root">
+        <div class="cart-layout">
+          <section aria-label="Bag items">
+            <div id="cart-items">
+              <div class="skeleton" style="height:120px;margin-bottom:1rem"></div>
+              <div class="skeleton" style="height:120px"></div>
+            </div>
+            <a class="link-underline" href="/shop" style="display:inline-block;margin-top:2rem">Continue shopping</a>
+          </section>
+
+          <aside class="summary" aria-label="Order summary">
+            <h2>Order summary</h2>
+            <div class="summary__rows" id="summary-rows">
+              <div class="summary__row"><span>Subtotal</span><span>—</span></div>
+            </div>
+            <div class="summary__total"><span>Total</span><span id="summary-total">—</span></div>
+            <a class="btn btn--block" id="checkout-link" href="/checkout" aria-disabled="true">Proceed to checkout</a>
+            <p class="summary__note" id="summary-note">Delivery is calculated at checkout.</p>
+          </aside>
+        </div>
+      </div>
+
+      <div class="container" id="cart-empty" hidden>
+        <div class="empty-state">
+          <span class="eyebrow">Nothing here yet</span>
+          <h2 style="margin-top:1rem">Your bag is empty.</h2>
+          <p>Start with the collection — a short list of objects we would keep ourselves.</p>
+          <a class="btn" href="/shop">Browse the collection</a>
+        </div>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="oak leather desk tray">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F0EAE0"/><stop offset="1" stop-color="#E3D8C8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#D7C9B4" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="740" rx="210" ry="24" fill="#5E4A30" opacity=".12"/>
+      <path d="M190 590 400 512l210 78-210 82-210-82Z" fill="#C4A87C"/>
+      <path d="M196 600 400 526l204 74v108l-204 80-204-80V600Z" fill="#A98A5F"/>
+      <path d="M216 616 400 550l184 66v82l-184 70-184-70v-82Z" fill="#5E4A30" opacity=".55"/>
+      <path d="M216 616 400 550l184 66-184 70-184-70Z" fill="#5E4A30" opacity=".3"/>
+      <rect x="270" y="640" width="128" height="10" rx="5" fill="#D9C8AC" opacity=".5" transform="skewX(-14)"/>
+      <circle cx="470" cy="656" r="18" fill="#E8DCC6" opacity=".35"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#5E4A30" opacity=".65">OAK LEATHER DESK TRAY</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

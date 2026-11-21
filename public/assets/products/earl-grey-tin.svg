@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="earl grey no 7">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EDE8DF"/><stop offset="1" stop-color="#E0D7C9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#D6CABA" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="764" rx="120" ry="14" fill="#39463A" opacity=".12"/>
+      <rect x="300" y="530" width="200" height="228" rx="14" fill="#5C6B5B"/>
+      <rect x="300" y="530" width="200" height="228" rx="14" fill="url(#glow)" opacity=".15"/>
+      <ellipse cx="400" cy="530" rx="100" ry="18" fill="#7E8E7C"/>
+      <ellipse cx="400" cy="527" rx="86" ry="13" fill="#39463A" opacity=".55"/>
+      <rect x="330" y="600" width="140" height="96" fill="#F3EEE2" opacity=".94"/>
+      <text x="400" y="636" text-anchor="middle" font-family="Georgia, serif" font-size="12" letter-spacing="3" fill="#39463A">EARL GREY</text>
+      <text x="400" y="662" text-anchor="middle" font-family="Georgia, serif" font-size="18" letter-spacing="2" fill="#39463A">No. 7</text>
+      <path d="M330 690h140" stroke="#39463A" stroke-width="1" opacity=".3"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#39463A" opacity=".65">EARL GREY NO 7</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="british wool throw">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F1ECE2"/><stop offset="1" stop-color="#E5DCCB"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".03"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <ellipse cx="400" cy="772" rx="250" ry="26" fill="#DACFBC" opacity=".85" filter="url(#soft)"/>
+  
+    <g>
+      <ellipse cx="400" cy="764" rx="190" ry="16" fill="#8E7E66" opacity=".1"/>
+      <rect x="222" y="600" width="356" height="92" rx="12" fill="#EAE1D1"/>
+      <rect x="236" y="546" width="328" height="86" rx="12" fill="#D9CDB8"/>
+      <rect x="252" y="494" width="296" height="80" rx="12" fill="#EAE1D1"/>
+      <path d="M222 692v22M248 692v22M274 692v22M300 692v22M326 692v22M352 692v22M378 692v22M404 692v22M430 692v22M456 692v22M482 692v22M508 692v22M534 692v22M560 692v22" stroke="#D9CDB8" stroke-width="5" opacity=".85"/>
+      <path d="M236 632h328M252 580h296" stroke="#8E7E66" stroke-width="1" opacity=".12"/>
+      <path d="M548 494c30 6 34 34 20 60" fill="none" stroke="#8E7E66" stroke-width="2" opacity=".2"/>
+    </g>
+  <text x="400" y="906" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" letter-spacing="6" fill="#8E7E66" opacity=".65">BRITISH WOOL THROW</text>
+  <rect width="800" height="1000" filter="url(#grain)" opacity=".6"/>
+</svg>

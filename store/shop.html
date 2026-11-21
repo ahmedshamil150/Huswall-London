@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop All | Hasswell London</title>
+    <meta name="description" content="Browse the Hasswell London collection: hand-poured candles, home fragrance, bath and body, textiles and kitchen objects." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/shop.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <div class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <span><a href="/">Home</a></span>
+            <span aria-current="page">Shop</span>
+          </nav>
+          <h1 id="shop-title">The Collection</h1>
+          <p class="lede" id="shop-subtitle">A short catalogue of objects for the home, made in small batches.</p>
+        </div>
+      </div>
+
+      <div class="container shop-layout">
+        <aside class="filters" id="filters" aria-label="Product filters">
+          <div class="between" style="margin-bottom:1.5rem">
+            <span class="eyebrow eyebrow--plain">Filter</span>
+            <button type="button" class="icon-btn" id="filters-close" aria-label="Close filters" style="margin-right:-.6rem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg>
+            </button>
+          </div>
+
+          <div class="filter-group">
+            <h3>Category</h3>
+            <ul class="filter-list" id="category-list">
+              <li><span class="skeleton" style="display:block;height:24px;margin-bottom:6px"></span></li>
+              <li><span class="skeleton" style="display:block;height:24px;margin-bottom:6px"></span></li>
+              <li><span class="skeleton" style="display:block;height:24px"></span></li>
+            </ul>
+          </div>
+
+          <div class="filter-group">
+            <h3>Availability</h3>
+            <label class="checkbox">
+              <input type="checkbox" id="filter-in-stock" />
+              <span>In stock only</span>
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <h3>Price</h3>
+            <ul class="filter-list" id="price-list">
+              <li><button type="button" data-price="0-2500">Under £25</button></li>
+              <li><button type="button" data-price="2500-5000">£25 – £50</button></li>
+              <li><button type="button" data-price="5000-10000">£50 – £100</button></li>
+              <li><button type="button" data-price="10000-">£100 and above</button></li>
+            </ul>
+          </div>
+
+          <button class="btn btn--outline btn--block" type="button" id="clear-filters" style="margin-top:2rem">Clear all</button>
+        </aside>
+
+        <div>
+          <div class="shop-toolbar">
+            <div class="cluster">
+              <button class="btn btn--outline btn--sm filter-toggle" type="button" id="filters-open">Filters</button>
+              <span class="result-count" id="result-count" aria-live="polite">Loading…</span>
+            </div>
+            <div class="select-wrap">
+              <label for="sort">Sort by</label>
+              <select id="sort">
+                <option value="featured">Featured</option>
+                <option value="newest">Newest</option>
+                <option value="popular">Popularity</option>
+                <option value="price_asc">Price: low to high</option>
+                <option value="price_desc">Price: high to low</option>
+                <option value="name_asc">Name: A–Z</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="active-filters" id="active-filters"></div>
+
+          <div class="product-grid product-grid--3" id="product-grid" aria-live="polite" aria-busy="true">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+          </div>
+
+          <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+        </div>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

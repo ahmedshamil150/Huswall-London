@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hasswell London — Considered objects for the modern British home</title>
+    <meta name="description" content="Hasswell London creates and curates considered home fragrance, bath and living objects. Made in small batches, chosen slowly, delivered across the UK." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/store/styles/main.css" />
+    <script type="module" src="/store/js/home.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
+
+    <main id="main">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container container--wide hero__inner">
+          <div class="hero__copy">
+            <span class="eyebrow">Est. London</span>
+            <h1 class="balance">Objects made to be kept.</h1>
+            <p class="lede">
+              Home fragrance, textiles and everyday objects chosen for the way they age.
+              Designed in London, made in small batches by British workshops.
+            </p>
+            <div class="hero__actions">
+              <a class="btn" href="/shop">Shop the collection</a>
+              <a class="btn btn--outline" href="/about">Our story</a>
+            </div>
+            <div class="hero__meta">
+              <span>Small-batch makers</span>
+              <span>UK delivery</span>
+              <span>Considered materials</span>
+            </div>
+          </div>
+          <div class="hero__media">
+            <img src="/assets/products/hero-still-life.svg" alt="Hasswell London candle, diffuser and tea tin arranged as a still life" width="1400" height="1200" fetchpriority="high" />
+            <span class="hero__caption">The Autumn Edit — No. 01</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Categories -->
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Browse</span>
+              <h2 style="margin-top:.75rem">Three quiet corners of the house.</h2>
+            </div>
+            <a class="link-underline" href="/shop">All products</a>
+          </div>
+          <div class="grid grid--3" id="category-tiles">
+            <a class="tile skeleton" href="/shop?category=candles" aria-label="Shop candles"></a>
+            <a class="tile skeleton" href="/shop?category=home-living" aria-label="Shop home and living"></a>
+            <a class="tile skeleton" href="/shop?category=bath-body" aria-label="Shop bath and body"></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Best sellers -->
+      <section class="section section--tight">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Most loved</span>
+              <h2 style="margin-top:.75rem">Best sellers</h2>
+            </div>
+            <a class="link-underline" href="/shop?best=1">Shop best sellers</a>
+          </div>
+          <div class="product-grid" id="best-sellers" aria-live="polite">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured collection -->
+      <section class="section section--warm">
+        <div class="container">
+          <div class="split">
+            <div class="split__media reveal">
+              <img src="/assets/products/british-wool-throw.svg" alt="Folded British wool throw in undyed ecru" width="800" height="1000" loading="lazy" />
+            </div>
+            <div class="reveal">
+              <span class="eyebrow">The Autumn Edit</span>
+              <h2 class="balance" style="margin-top:.9rem">Layers for the quieter months.</h2>
+              <p class="lede" style="margin-top:1.25rem">
+                Undyed wool, amber glass and the last of the garden herbs. A small
+                collection for the evenings when the light goes early.
+              </p>
+              <p class="muted" style="margin-top:1rem;max-width:44ch">
+                Every piece is chosen to be used, not displayed. Nothing here needs
+                special care, and everything is expected to look better with time.
+              </p>
+              <a class="btn btn--outline" href="/shop" style="margin-top:2rem">Explore the edit</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- New arrivals -->
+      <section class="section section--tight">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Just landed</span>
+              <h2 style="margin-top:.75rem">New arrivals</h2>
+            </div>
+            <a class="link-underline" href="/shop?sort=newest">Shop new in</a>
+          </div>
+          <div class="product-grid" id="new-arrivals" aria-live="polite">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Brand introduction -->
+      <section class="section">
+        <div class="container">
+          <div class="split split--reverse">
+            <div class="split__media reveal">
+              <img src="/assets/products/about-atelier.svg" alt="A workshop bench with glassware and tools" width="800" height="1000" loading="lazy" />
+            </div>
+            <div class="reveal">
+              <span class="eyebrow">Our approach</span>
+              <h2 class="balance" style="margin-top:.9rem">Made in Britain, chosen slowly.</h2>
+              <p class="lede" style="margin-top:1.25rem">
+                We work with a small number of makers — a candle studio, a Yorkshire
+                woollen mill, a pottery in Stoke-on-Trent — and put our name only on
+                things we would keep ourselves.
+              </p>
+              <p class="muted" style="margin-top:1rem;max-width:44ch">
+                No seasonal churn, no invented claims. A short catalogue that we
+                intend to still be selling in five years.
+              </p>
+              <a class="btn btn--ghost" href="/about" style="margin-top:1.75rem">
+                Read our story
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust -->
+      <section class="section section--tight" style="border-top:1px solid var(--line)">
+        <div class="container">
+          <div class="value-grid">
+            <div class="value-item reveal">
+              <span class="value-item__num">01</span>
+              <h3>Considered sourcing</h3>
+              <p>A short list of British makers and small studios, chosen in person rather than by algorithm.</p>
+            </div>
+            <div class="value-item reveal">
+              <span class="value-item__num">02</span>
+              <h3>Secure checkout</h3>
+              <p>Payments are verified on our server. Card details are handled by the payment provider and never stored by us.</p>
+            </div>
+            <div class="value-item reveal">
+              <span class="value-item__num">03</span>
+              <h3>Real people</h3>
+              <p>Questions about an order go to a person in London, not a ticket queue. Write to us at any point.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section class="newsletter">
+        <div class="container newsletter__inner">
+          <div>
+            <span class="eyebrow">Correspondence</span>
+            <h2 style="margin-top:.75rem">A letter, occasionally.</h2>
+            <p>New pieces, workshop notes and the rare advance notice. No more than once a month.</p>
+          </div>
+          <div>
+            <form data-newsletter-form novalidate>
+              <label class="visually-hidden" for="newsletter-email">Email address</label>
+              <input id="newsletter-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required />
+              <button type="submit">Subscribe</button>
+            </form>
+            <p class="form-note">By subscribing you agree to our <a href="/privacy" style="text-decoration:underline">Privacy Policy</a>. Unsubscribe at any time.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>
