@@ -1,0 +1,60 @@
+name: Supplier sync
+
+# Free alternative to Vercel Pro cron: GitHub Actions can call the protected
+# endpoint every two hours. The daily Vercel cron remains as a fallback.
+on:
+  schedule:
+    # Minute 30 avoids colliding with the daily Vercel job at 03:00 UTC.
+    - cron: '30 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supplier-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check configuration
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "::error::Repository secret SITE_URL is missing. Set it to https://YOUR_DOMAIN."
+            exit 1
+          fi
+          case "$SITE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::SITE_URL must start with https://."
+              exit 1
+              ;;
+          esac
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::Repository secret CRON_SECRET is missing. Use the same value configured in Vercel."
+            exit 1
+          fi
+
+      - name: Trigger supplier sync
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          url="${SITE_URL%/}/api/cron/sync-supplier"
+          echo "Calling $url"
+          curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --retry 3 \
+            --retry-delay 10 \
+            --max-time 90 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$url"

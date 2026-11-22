@@ -138,9 +138,10 @@ Important behaviour:
 The cron endpoint `GET /api/cron/sync-supplier` runs the sync, releases unpaid
 orders older than 24 hours, and prunes operational tables. The committed Vercel
 schedule is daily (`0 3 * * *`) because Hobby accounts cannot run more frequent
-cron jobs; Vercel Pro or an external scheduler can call the same endpoint every
-one to two hours. The request must carry
-`Authorization: Bearer <CRON_SECRET>`.
+cron jobs. The included GitHub Actions workflow
+(`.github/workflows/supplier-sync.yml`) calls the same endpoint every two hours
+without Vercel Pro; an external scheduler can also be used. The request must
+carry `Authorization: Bearer <CRON_SECRET>`.
 
 Stock freshness is therefore a plan decision. If the store stays on Hobby, run a
 manual **Sync catalogue** before a busy trading period or move to Pro for

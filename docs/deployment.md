@@ -243,12 +243,40 @@ one of these options:
 1. **Vercel Pro:** change the schedule to `0 */2 * * *` (every two hours).
 2. **External scheduler:** keep the Hobby deployment and call
    `https://YOUR_DOMAIN/api/cron/sync-supplier` every one or two hours with
-   `Authorization: Bearer <CRON_SECRET>`. Use a scheduler you can monitor.
+   `Authorization: Bearer <CRON_SECRET>`. The included GitHub Actions workflow
+   does this for free; see below.
 3. **Manual operation:** run **Sync catalogue** in Admin → Supplier before
    processing orders. This is only suitable for low order volumes.
 
 Do not remove the cron entirely: it also releases expired reservations and
 prunes operational tables.
+
+### Free two-hourly scheduling with GitHub Actions
+
+This repository includes `.github/workflows/supplier-sync.yml`, which calls the
+same endpoint every two hours at minute 30. It needs no Vercel Pro plan.
+
+1. In GitHub, open **Settings → Secrets and variables → Actions → New repository
+   secret**.
+2. Add `SITE_URL` — for example `https://hasswelllondon.co.uk` (no trailing
+   slash).
+3. Add `CRON_SECRET` — the **same** value configured in Vercel.
+4. Open **Actions → Supplier sync → Run workflow** to test it immediately.
+5. Confirm the run returns `ok: true` and that Admin → Supplier shows a new sync
+   log.
+
+The workflow:
+
+- runs only on the repository's default branch;
+- prints no secrets;
+- fails loudly if either secret is missing or the URL is not HTTPS;
+- retries transient failures up to three times;
+- avoids overlapping runs.
+
+GitHub's scheduler can be delayed under load and may pause scheduled workflows
+in a repository with no activity for 60 days. The daily Vercel cron remains
+enabled as a fallback, so a missed GitHub run is recovered within 24 hours.
+Re-enable the workflow from the Actions tab if GitHub pauses it.
 
 Test manually:
 
