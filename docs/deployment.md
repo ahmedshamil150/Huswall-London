@@ -196,10 +196,14 @@ signatures before parsing the body. Do not disable this check to "make it work".
 ```json
 {
   "crons": [
-    { "path": "/api/cron/sync-supplier", "schedule": "0 */2 * * *" }
+    { "path": "/api/cron/sync-supplier", "schedule": "0 3 * * *" }
   ]
 }
 ```
+
+That schedule runs once daily at 03:00 UTC. It is deliberately compatible with
+Vercel's Hobby plan, which rejects cron expressions that run more than once per
+day. The endpoint itself is unchanged and can be called more frequently.
 
 The endpoint requires:
 
@@ -217,10 +221,34 @@ The job:
 2. releases unpaid orders older than 24 hours;
 3. prunes rate-limit and email-log rows.
 
-Plan limits apply. Historically, Vercel Hobby accounts have been restricted to
-daily cron schedules; confirm the current limit for the client's plan before
-relying on a two-hourly job. If the plan cannot run it, use an external
-scheduler or upgrade.
+### Cron frequency and stock freshness
+
+Vercel Hobby accounts are limited to **daily** cron jobs. A schedule such as
+`0 */2 * * *` is rejected at deployment with:
+
+> Hobby accounts are limited to daily cron jobs. This cron expression would run
+> more than once per day. Upgrade to the Pro plan…
+
+On Hobby, the daily schedule above is the maximum available:
+
+- supplier stock and prices can be up to 24 hours stale;
+- unpaid orders can remain reserved for up to roughly 48 hours (24-hour
+  reservation plus the next daily run);
+- manual **Sync catalogue** and **Poll status** actions in the admin panel still
+  work at any time.
+
+For a live dropshipping store, more frequent stock updates are preferable. Use
+one of these options:
+
+1. **Vercel Pro:** change the schedule to `0 */2 * * *` (every two hours).
+2. **External scheduler:** keep the Hobby deployment and call
+   `https://YOUR_DOMAIN/api/cron/sync-supplier` every one or two hours with
+   `Authorization: Bearer <CRON_SECRET>`. Use a scheduler you can monitor.
+3. **Manual operation:** run **Sync catalogue** in Admin → Supplier before
+   processing orders. This is only suitable for low order volumes.
+
+Do not remove the cron entirely: it also releases expired reservations and
+prunes operational tables.
 
 Test manually:
 

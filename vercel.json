@@ -28,7 +28,7 @@
     { "source": "/admin/(.*)", "destination": "/admin/index.html" }
   ],
   "crons": [
-    { "path": "/api/cron/sync-supplier", "schedule": "0 */2 * * *" }
+    { "path": "/api/cron/sync-supplier", "schedule": "0 3 * * *" }
   ],
   "headers": [
     {

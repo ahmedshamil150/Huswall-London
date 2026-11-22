@@ -136,8 +136,15 @@ Important behaviour:
   not roll back unrelated store data.
 
 The cron endpoint `GET /api/cron/sync-supplier` runs the sync, releases unpaid
-orders older than 24 hours, and prunes operational tables. Vercel Cron calls it
-every two hours; the request must carry `Authorization: Bearer <CRON_SECRET>`.
+orders older than 24 hours, and prunes operational tables. The committed Vercel
+schedule is daily (`0 3 * * *`) because Hobby accounts cannot run more frequent
+cron jobs; Vercel Pro or an external scheduler can call the same endpoint every
+one to two hours. The request must carry
+`Authorization: Bearer <CRON_SECRET>`.
+
+Stock freshness is therefore a plan decision. If the store stays on Hobby, run a
+manual **Sync catalogue** before a busy trading period or move to Pro for
+two-hourly updates.
 
 ### Order status polling
 
