@@ -5,7 +5,8 @@ database. Production deployment is covered in [deployment.md](deployment.md).
 
 ## 1. Prerequisites
 
-- Node.js **20 or newer** and npm.
+- Node.js **24.x** and npm. The version is pinned in `package.json` and
+  `.nvmrc`; run `nvm use` before installing.
 - A Supabase project (the free tier is sufficient for setup and review).
 - Optional: the Vercel CLI for running `/api` functions locally.
 - Git, if you are cloning the repository.

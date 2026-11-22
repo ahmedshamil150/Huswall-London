@@ -80,7 +80,10 @@ rotate it; deleting the commit is not enough.
 2. Framework preset: **Vite** (already set in `vercel.json`).
 3. Build command: `npm run build`.
 4. Output directory: `dist`.
-5. Node.js version: 20 or newer.
+5. Node.js version: **24.x**. It is pinned by `engines.node` in `package.json`,
+   so leaving the project setting on its default is fine. Do not change the
+   range to `>=20`: Vercel treats open-ended ranges as "latest supported major"
+   and will silently upgrade across major versions.
 6. Do not override the install command unless your environment requires it.
 
 Vercel detects the `api/` directory as serverless functions. `vercel.json`
