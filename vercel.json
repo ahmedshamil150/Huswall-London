@@ -8,6 +8,7 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/robots.txt", "destination": "/api/robots" },
+    { "source": "/api/:path*", "destination": "/api" },
     { "source": "/", "destination": "/store/index.html" },
     { "source": "/shop", "destination": "/store/shop.html" },
     { "source": "/product/:slug", "destination": "/store/product.html?slug=:slug" },
