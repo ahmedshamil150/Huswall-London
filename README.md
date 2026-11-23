@@ -44,7 +44,7 @@ supplier fulfilment. It records exactly what was verified, what was not, and why
 - **Supplier:** connector-based integration with a single AW Dropship adapter.
 - **Tests:** Node's built-in test runner.
 
-Node.js **20.x** is required. The major version is pinned in `package.json`
+Node.js **26.x** is required. The major version is pinned in `package.json`
 (`engines.node`) and `.nvmrc` so Vercel does not move to a new major release
 without review. Run `nvm use` before installing on a machine with several Node
 versions.
