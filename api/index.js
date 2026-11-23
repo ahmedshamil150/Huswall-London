@@ -1,21 +1,22 @@
 import { createHash } from 'node:crypto';
-import { handler, ok, fail, AppError, assertMethod, requireJson, readJson, getClientIp, json } from './_lib/http.js';
-import { serviceClient, requireAdmin, requireUser, translateDbError, getAuthenticatedUser } from './_lib/supabase.js';
-import { env, requireEnv, siteUrl, flags } from './_lib/env.js';
-import { enforceRateLimit, hashIdentifier } from './_lib/rate-limit.js';
+import { handler, ok, fail, AppError, assertMethod, requireJson, json } from './_lib/http.js';
+import { serviceClient, requireAdmin, translateDbError, getAuthenticatedUser } from './_lib/supabase.js';
+import { env, siteUrl, flags } from './_lib/env.js';
+import { enforceRateLimit } from './_lib/rate-limit.js';
 import { validateCartItems, validateCheckoutInput, validateContactInput, validateNewsletterInput, validateIdempotencyKey, normaliseEmail, isEmail } from './_lib/validate.js';
-import { parsePagination, slugify, cleanSlug, validateProductInput, SETTINGS_SPEC, validateSettingsInput } from './_lib/admin.js';
+import { parsePagination, slugify, cleanSlug, validateProductInput, SETTINGS_SPEC, validateSettingsInput, cleanText, cleanMultiline, asInt, asBoolean } from './_lib/admin.js';
 import { resolveCart } from './_lib/cart-service.js';
 import { loadShippingSettings, calculateShipping, shippingRegions, shippingNote, storeCurrency } from './_lib/shipping.js';
 import { getPaymentProvider, requirePaymentProvider, paymentProviderStatus } from '../../integrations/payments/registry.js';
 import { createSupplierConnector } from '../../integrations/suppliers/registry.js';
 import { syncSupplier, refreshSupplierOrderStatus } from '../../integrations/suppliers/aw-dropship/sync-service.js';
-import { sendOrderEmail, sendSafely, sendEmail } from './_lib/email.js';
+import { sendOrderEmail, sendSafely } from './_lib/email.js';
 import {
   getOrderByAccess, getOrderById, getOrderItems, markOrderPaid, orderAccessUrl, manualPaymentInstructions,
-  sendDispatchEmail, sendCancellationEmail, publicOrder, paymentDetails
+  sendDispatchEmail, sendCancellationEmail, publicOrder
 } from './_lib/orders.js';
 import { validateImages, validateCategoryIds, validateVariants } from './_lib/admin.js';
+import { loadAdminProduct, replaceImages, replaceCategories, syncVariants } from './_lib/product-admin.js';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -23,23 +24,16 @@ function isUuid(value) {
   return typeof value === 'string' && UUID_RE.test(value);
 }
 
-function pathSegments(req) {
-  // When Vercel rewrites /api/:path* to /api, the original path is in
-  // x-vercel-rewrite-source. Otherwise req.url is used directly.
-  const rewriteSource = req.headers['x-vercel-rewrite-source'];
-  const sourcePath = typeof rewriteSource === 'string' ? rewriteSource : req.url;
-  const url = new URL(sourcePath, 'http://localhost');
-  return url.pathname.slice('/api'.length).split('/').filter(Boolean);
-}
-
 function originalUrl(req) {
   const rewriteSource = req.headers['x-vercel-rewrite-source'];
   return typeof rewriteSource === 'string' ? rewriteSource : req.url;
 }
 
-/* ========================================================================
-   Request body reader (Node req/res style)
-   ======================================================================== */
+function pathSegments(req) {
+  const url = new URL(originalUrl(req), 'http://localhost');
+  return url.pathname.slice('/api'.length).split('/').filter(Boolean);
+}
+
 async function readBody(req, maxBytes = 64 * 1024) {
   const chunks = [];
   let size = 0;
@@ -64,7 +58,7 @@ function requireContentTypeJson(req) {
 }
 
 /* ========================================================================
-   Route handlers (each returns a Promise that writes to res)
+   Route handlers
    ======================================================================== */
 
 async function handleHealth(req, res) {
@@ -405,65 +399,23 @@ async function handlePaymentsWebhook(req, res) {
   return ok(res, { ok: true, received: true });
 }
 
+/* ========================================================================
+   Admin route handlers
+   ======================================================================== */
+
+function sanitiseSearch(value) {
+  return String(value || '').trim().slice(0, 80).replace(/[%,()]/g, ' ');
+}
+
+function filterValue(params, key, allowed) {
+  const raw = params.get(key);
+  if (raw === null || raw === '') return null;
+  const value = String(raw).trim();
+  if (!allowed.has(value)) throw new AppError('INVALID_FILTER', `Unknown ${key.replace('_', ' ')} filter.`, 400, { field: key });
+  return value;
+}
+
 async function handleAdminDashboard(req, res) {
-  assertMethod(req, ['GET']);
-  const { profile } = await requireAdmin(req);
-  const { data, error } = await serviceClient().rpc('admin_dashboard_stats');
-  if (error) throw translateDbError(error);
-  return ok(res, { admin: { email: profile.email, name: profile.full_name || profile.email }, stats: data ?? {} });
-}
-
-async function handleAdminCategories(req, res) {
-  await requireAdmin(req);
-  assertMethod(req, ['GET', 'POST']);
-  const db = serviceClient();
-  const segments = pathSegments(req);
-  if (segments.length >= 1 && segments[0] === 'categories' && segments.length === 2) {
-    const id = segments[1];
-    if (!UUID_RE.test(id)) throw new AppError('INVALID_CATEGORY', 'Invalid category reference.', 400);
-    if (req.method === 'DELETE') {
-      const { error } = await db.from('categories').update({ is_active: false }).eq('id', id);
-      if (error) throw translateDbError(error);
-      return ok(res, { archived: true });
-    }
-    requireContentTypeJson(req);
-    const body = await readBody(req, 32 * 1024);
-    const update = {};
-    if (body.name !== undefined) { update.name = cleanText(body.name, { max: 120 }); if (!update.name) throw new AppError('INVALID_CATEGORY', 'Enter a category name.', 400, { field: 'name' }); }
-    if (body.slug !== undefined) update.slug = cleanSlug(body.slug, update.name || body.slug);
-    if (body.description !== undefined) update.description = cleanText(body.description, { max: 500 }) || null;
-    if (body.image_url !== undefined) update.image_url = cleanText(body.image_url, { max: 800 }) || null;
-    if (body.sort_order !== undefined) update.sort_order = asInt(body.sort_order, { min: 0, max: 9999, fallback: 0 });
-    if (body.is_active !== undefined) update.is_active = asBoolean(body.is_active);
-    if (!Object.keys(update).length) throw new AppError('INVALID_CATEGORY', 'No changes were provided.', 400);
-    const { data, error } = await db.from('categories').update(update).eq('id', id).select('*').single();
-    if (error) {
-      if (error.code === '23505') throw new AppError('DUPLICATE_CATEGORY', 'A category with that slug already exists.', 409);
-      throw translateDbError(error);
-    }
-    return ok(res, { category: data });
-  }
-  if (segments.length === 1 && segments[0] === 'categories') {
-    if (req.method === 'GET') {
-      const { data, error } = await db.from('categories').select('id, parent_id, name, slug, description, image_url, sort_order, is_active, created_at, updated_at, product_categories ( product_id )').order('sort_order', { ascending: true });
-      if (error) throw translateDbError(error);
-      return ok(res, { items: (data ?? []).map((row) => ({ ...row, product_count: row.product_categories?.length ?? 0 })) });
-    }
-    requireContentTypeJson(req);
-    const body = await readBody(req, 32 * 1024);
-    const name = cleanText(body.name, { max: 120 });
-    if (!name) throw new AppError('INVALID_CATEGORY', 'Enter a category name.', 400, { field: 'name' });
-    const { data, error } = await db.from('categories').insert({ name, slug: cleanSlug(body.slug, name), description: cleanText(body.description, { max: 500 }) || null, image_url: cleanText(body.image_url, { max: 800 }) || null, sort_order: asInt(body.sort_order, { min: 0, max: 9999, fallback: 0 }), is_active: body.is_active === undefined ? true : asBoolean(body.is_active) }).select('*').single();
-    if (error) {
-      if (error.code === '23505') throw new AppError('DUPLICATE_CATEGORY', 'A category with that slug already exists.', 409);
-      throw translateDbError(error);
-    }
-    return ok(res, { category: data }, 201);
-  }
-  throw new AppError('NOT_FOUND', 'Not found.', 404);
-}
-
-async function handleAdminDashboardRoute(req, res) {
   assertMethod(req, ['GET']);
   const { profile } = await requireAdmin(req);
   const { data, error } = await serviceClient().rpc('admin_dashboard_stats');
@@ -477,6 +429,16 @@ async function handleAdminEmailLog(req, res) {
   const { data, error } = await serviceClient().from('email_log').select('id, order_id, to_email, template, subject, status, provider, error, created_at').order('created_at', { ascending: false }).limit(100);
   if (error) throw translateDbError(error);
   return ok(res, { items: data ?? [] });
+}
+
+async function handleAdminNewsletter(req, res) {
+  await requireAdmin(req);
+  assertMethod(req, ['GET']);
+  const url = new URL(originalUrl(req), 'http://localhost');
+  const { page, pageSize, from, to } = parsePagination(url, { defaultSize: 50, maxSize: 200 });
+  const { data, count, error } = await serviceClient().from('newsletter_subscribers').select('id, email, source, confirmed, created_at', { count: 'exact' }).order('created_at', { ascending: false }).range(from, to);
+  if (error) throw translateDbError(error);
+  return ok(res, { items: data ?? [], total: count ?? 0, page, pageSize });
 }
 
 async function handleAdminInventory(req, res) {
@@ -536,24 +498,64 @@ async function handleAdminMessages(req, res) {
   return ok(res, { updated: true });
 }
 
-async function handleAdminNewsletter(req, res) {
+async function handleAdminCategories(req, res) {
   await requireAdmin(req);
-  assertMethod(req, ['GET']);
-  const url = new URL(originalUrl(req), 'http://localhost');
-  const { page, pageSize, from, to } = parsePagination(url, { defaultSize: 50, maxSize: 200 });
-  const { data, count, error } = await serviceClient().from('newsletter_subscribers').select('id, email, source, confirmed, created_at', { count: 'exact' }).order('created_at', { ascending: false }).range(from, to);
-  if (error) throw translateDbError(error);
-  return ok(res, { items: data ?? [], total: count ?? 0, page, pageSize });
+  assertMethod(req, ['GET', 'POST']);
+  const segments = pathSegments(req);
+  const db = serviceClient();
+  if (segments.length >= 1 && segments[0] === 'categories' && segments.length === 2) {
+    const id = segments[1];
+    if (!UUID_RE.test(id)) throw new AppError('INVALID_CATEGORY', 'Invalid category reference.', 400);
+    if (req.method === 'DELETE') {
+      const { error } = await db.from('categories').update({ is_active: false }).eq('id', id);
+      if (error) throw translateDbError(error);
+      return ok(res, { archived: true });
+    }
+    requireContentTypeJson(req);
+    const body = await readBody(req, 32 * 1024);
+    const update = {};
+    if (body.name !== undefined) { update.name = cleanText(body.name, { max: 120 }); if (!update.name) throw new AppError('INVALID_CATEGORY', 'Enter a category name.', 400, { field: 'name' }); }
+    if (body.slug !== undefined) update.slug = cleanSlug(body.slug, update.name || body.slug);
+    if (body.description !== undefined) update.description = cleanText(body.description, { max: 500 }) || null;
+    if (body.image_url !== undefined) update.image_url = cleanText(body.image_url, { max: 800 }) || null;
+    if (body.sort_order !== undefined) update.sort_order = asInt(body.sort_order, { min: 0, max: 9999, fallback: 0 });
+    if (body.is_active !== undefined) update.is_active = asBoolean(body.is_active);
+    if (!Object.keys(update).length) throw new AppError('INVALID_CATEGORY', 'No changes were provided.', 400);
+    const { data, error } = await db.from('categories').update(update).eq('id', id).select('*').single();
+    if (error) {
+      if (error.code === '23505') throw new AppError('DUPLICATE_CATEGORY', 'A category with that slug already exists.', 409);
+      throw translateDbError(error);
+    }
+    return ok(res, { category: data });
+  }
+  if (segments.length === 1 && segments[0] === 'categories') {
+    if (req.method === 'GET') {
+      const { data, error } = await db.from('categories').select('id, parent_id, name, slug, description, image_url, sort_order, is_active, created_at, updated_at, product_categories ( product_id )').order('sort_order', { ascending: true });
+      if (error) throw translateDbError(error);
+      return ok(res, { items: (data ?? []).map((row) => ({ ...row, product_count: row.product_categories?.length ?? 0 })) });
+    }
+    requireContentTypeJson(req);
+    const body = await readBody(req, 32 * 1024);
+    const name = cleanText(body.name, { max: 120 });
+    if (!name) throw new AppError('INVALID_CATEGORY', 'Enter a category name.', 400, { field: 'name' });
+    const { data, error } = await db.from('categories').insert({ name, slug: cleanSlug(body.slug, name), description: cleanText(body.description, { max: 500 }) || null, image_url: cleanText(body.image_url, { max: 800 }) || null, sort_order: asInt(body.sort_order, { min: 0, max: 9999, fallback: 0 }), is_active: body.is_active === undefined ? true : asBoolean(body.is_active) }).select('*').single();
+    if (error) {
+      if (error.code === '23505') throw new AppError('DUPLICATE_CATEGORY', 'A category with that slug already exists.', 409);
+      throw translateDbError(error);
+    }
+    return ok(res, { category: data }, 201);
+  }
+  throw new AppError('NOT_FOUND', 'Not found.', 404);
 }
 
 async function handleAdminOrders(req, res) {
-  await requireAdmin(req);
-  assertMethod(req, ['GET']);
+  const { profile } = await requireAdmin(req);
+  assertMethod(req, ['GET', 'PATCH', 'POST']);
   const segments = pathSegments(req);
-  if (segments.length >= 1 && segments[0] === 'orders' && segments.length === 2) {
-    return handleAdminOrderDetail(req, res);
-  }
+  const id = segments[segments.length - 1];
   if (segments.length === 1 && segments[0] === 'orders') {
+    // List orders
+    assertMethod(req, ['GET']);
     const url = new URL(originalUrl(req), 'http://localhost');
     const { page, pageSize, from, to } = parsePagination(url, { defaultSize: 25, maxSize: 100 });
     const q = sanitiseSearch(url.searchParams.get('q'));
@@ -569,14 +571,6 @@ async function handleAdminOrders(req, res) {
     if (error) throw translateDbError(error);
     return ok(res, { items: data ?? [], total: count ?? 0, page, pageSize });
   }
-  throw new AppError('NOT_FOUND', 'Not found.', 404);
-}
-
-async function handleAdminOrderDetail(req, res) {
-  const { profile } = await requireAdmin(req);
-  assertMethod(req, ['GET', 'PATCH', 'POST']);
-  const segments = pathSegments(req);
-  const id = segments[segments.length - 1];
   if (!UUID_RE.test(id)) throw new AppError('INVALID_ORDER', 'Invalid order reference.', 400);
   const db = serviceClient();
   const actor = `admin:${profile.email}`;
@@ -689,10 +683,10 @@ async function handleAdminProducts(req, res) {
   await requireAdmin(req);
   assertMethod(req, ['GET', 'POST', 'PATCH', 'DELETE']);
   const segments = pathSegments(req);
+  const db = serviceClient();
   if (segments.length >= 1 && segments[0] === 'products' && segments.length === 2) {
     const id = segments[1];
     if (!UUID_RE.test(id)) throw new AppError('INVALID_PRODUCT', 'Invalid product reference.', 400);
-    const db = serviceClient();
     const existing = await loadAdminProduct(db, id);
     if (req.method === 'GET') return ok(res, { product: existing });
     if (req.method === 'DELETE') {
@@ -722,7 +716,6 @@ async function handleAdminProducts(req, res) {
     return ok(res, { product: full });
   }
   if (segments.length === 1 && segments[0] === 'products') {
-    const db = serviceClient();
     if (req.method === 'GET') {
       const url = new URL(originalUrl(req), 'http://localhost');
       const { page, pageSize, from, to } = parsePagination(url, { defaultSize: 20, maxSize: 100 });
@@ -867,59 +860,13 @@ async function handleCronSyncSupplier(req, res) {
    Helpers
    ======================================================================== */
 
-function cleanText(value, { max = 500, multiline = false } = {}) {
-  if (value === null || value === undefined) return '';
-  let text = String(value);
-  if (multiline) {
-    text = text.replace(/\r\n?/g, '\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '');
-    text = text.split('\n').map((line) => line.replace(/[^\S\n]+/g, ' ').trim()).join('\n').replace(/\n{3,}/g, '\n\n');
-  } else {
-    text = text.replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim();
-  }
-  return text.slice(0, max);
-}
-
-function cleanMultiline(value, { max = 2000 } = {}) {
-  return cleanText(value, { max, multiline: true });
-}
-
-function asInt(value, { min = -Infinity, max = Infinity, fallback = null } = {}) {
-  if (value === null || value === undefined || value === '') return fallback;
-  const number = Number(value);
-  if (!Number.isFinite(number) || !Number.isInteger(number)) return fallback;
-  if (number < min || number > max) return fallback;
-  return number;
-}
-
-function asBoolean(value) {
-  if (value === true || value === 'true' || value === 1 || value === '1') return true;
-  if (value === false || value === 'false' || value === 0 || value === '0') return false;
-  return false;
+function timingSafeEqual(a, b) {
+  try { return createHash('sha256').update(a).digest() === createHash('sha256').update(b).digest(); } catch { return false; }
 }
 
 function randomUUID() {
   return createHash('sha256').update(String(Date.now()) + Math.random()).digest('hex');
 }
-
-function sanitiseSearch(value) {
-  return String(value || '').trim().slice(0, 80).replace(/[%,()]/g, ' ');
-}
-
-function filterValue(params, key, allowed) {
-  const raw = params.get(key);
-  if (raw === null || raw === '') return null;
-  const value = String(raw).trim();
-  if (!allowed.has(value)) throw new AppError('INVALID_FILTER', `Unknown ${key.replace('_', ' ')} filter.`, 400, { field: key });
-  return value;
-}
-
-function timingSafeEqual(a, b) {
-  try { return createHash('sha256').update(a).digest() === createHash('sha256').update(b).digest(); } catch { return false; }
-}
-
-/* ========================================================================
-   Contact / email notification (imported from email-templates)
-   ======================================================================== */
 
 function contactNotificationEmail({ message, siteUrl }) {
   const subject = `New contact message: ${message.subject}`;
@@ -986,12 +933,11 @@ function matchRoute(segments, method) {
 }
 
 /* ========================================================================
-   Entry point (Node req/res handler)
+   Entry point
    ======================================================================== */
 
 export default handler(async (req, res) => {
-  const url = new URL(originalUrl(req), 'http://localhost');
-  const segments = url.pathname.slice('/api'.length).split('/').filter(Boolean);
+  const segments = pathSegments(req);
   const match = matchRoute(segments, req.method);
   if (!match) {
     res.statusCode = 404;
